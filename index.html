@@ -94,10 +94,12 @@ strong { font-weight: 500; }
 .ladder { display: grid; gap: 0.5rem; margin: 2rem 0; }
 .ladder .rung {
   display: grid; grid-template-columns: 2rem 1fr; align-items: center; gap: 0.75rem;
-  font-size: 0.85rem; color: var(--ink-soft);
+  font-size: 0.85rem; color: var(--ink-soft); text-decoration: none;
 }
+.ladder .rung:hover .label { opacity: 1; color: var(--navy); }
+.ladder .rung:hover .box { border-color: var(--coral); }
 .ladder .rung .box { height: 2rem; border: 1.5px solid var(--navy); border-radius: 3px; transition: background .3s, border-color .3s; }
-.ladder .rung .label { opacity: 0.55; transition: opacity .3s; }
+.ladder .rung .label { opacity: 0.55; transition: opacity .3s, color .3s; }
 .ladder .rung[data-active="true"] .label { opacity: 1; color: var(--navy); font-weight: 500; }
 .ladder .rung[data-level="1"][data-active="true"] .box { background: var(--sage); }
 .ladder .rung[data-level="2"][data-active="true"] .box { background: var(--mint); }
@@ -265,33 +267,27 @@ details.template pre { white-space: pre-wrap; font-family: var(--font); font-siz
 .example .row .k { font-weight: 500; color: var(--coral); }
 .example .row p { max-width: none; color: var(--ink); }
 
-/* ---------------------------------------------------------- your list */
-.roomlist { margin-top: 3rem; }
-.roomlist li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.8fr) 7rem; gap: 1rem var(--gutter); padding: 1rem 0; border-top: 1px solid var(--rule); align-items: baseline; }
-.roomlist li:last-child { border-bottom: 1px solid var(--rule); }
-.roomlist .org { font-weight: 500; color: var(--navy); }
-.roomlist .task { color: var(--ink-soft); }
-.roomlist .task.fill { color: var(--ink-soft); font-style: italic; opacity: 0.7; }
-.roomlist .lvl { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 500; color: var(--navy); justify-self: end; }
-.roomlist .lvl .swatch { width: 1rem; height: 1rem; border-radius: 3px; border: 1.5px solid var(--navy); }
-.roomlist .lvl.l1 .swatch { background: var(--sage); } .roomlist .lvl.l2 .swatch { background: var(--mint); } .roomlist .lvl.l3 .swatch { background: var(--peach); }
-.roomlist .lvl.l0 .swatch { background: transparent; border-style: dashed; }
-@media (max-width: 720px) { .roomlist li { grid-template-columns: 1fr; gap: 0.25rem; } .roomlist .lvl { justify-self: start; } }
-
 /* ---------------------------------------------------------- prompts */
 .prompts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem var(--gutter); margin-top: 3rem; align-items: start; }
 @media (max-width: 900px) { .prompts { grid-template-columns: 1fr; } }
-details.prompt { border-top: 2px solid var(--navy); }
-details.prompt summary { cursor: pointer; list-style: none; padding: 1.25rem 0; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1rem; align-items: start; }
+details.prompt { border-top: 2px solid var(--navy); border-radius: 0 0 4px 4px; transition: background .2s; }
+details.prompt:hover { background: rgba(255,255,255,0.5); }
+details.prompt[open] { background: rgba(255,255,255,0.7); }
+details.prompt summary { cursor: pointer; list-style: none; padding: 1.25rem 1rem; margin: 0 -1rem; display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 1rem; align-items: center; border-radius: 4px; transition: background .2s; }
 details.prompt summary::-webkit-details-marker { display: none; }
-details.prompt summary h3 { font-size: var(--step-1); }
-details.prompt summary .lt { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; color: var(--ink-soft); white-space: nowrap; padding-top: 0.2rem; }
+details.prompt summary:hover { background: rgba(255,255,255,0.6); }
+details.prompt summary h3 { font-size: var(--step-1); transition: color .2s; }
+details.prompt summary:hover h3 { color: var(--coral); }
+details.prompt summary .lt { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; color: var(--ink-soft); white-space: nowrap; }
 details.prompt summary .lt .swatch { width: 0.85rem; height: 0.85rem; border-radius: 2px; border: 1.5px solid var(--navy); }
 details.prompt summary .lt.l1 .swatch { background: var(--sage); } details.prompt summary .lt.l2 .swatch { background: var(--mint); } details.prompt summary .lt.l3 .swatch { background: var(--peach); }
-details.prompt .why { color: var(--ink-soft); margin-bottom: 1rem; }
-details.prompt pre { white-space: pre-wrap; font-family: var(--font); font-size: 0.95rem; line-height: 1.6; margin: 0 0 1rem; padding: 1.25rem; background: var(--white); border: 1px solid var(--rule); border-radius: 3px; color: var(--ink); }
+details.prompt summary .chevron { width: 1.25rem; height: 1.25rem; display: flex; align-items: center; justify-content: center; transition: transform .2s; color: var(--navy); }
+details.prompt summary .chevron::before { content: ""; width: 0.5rem; height: 0.5rem; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(-45deg); margin-top: -0.15rem; }
+details.prompt[open] summary .chevron { transform: rotate(180deg); }
+details.prompt .why { color: var(--ink-soft); margin-bottom: 1rem; padding: 0 1rem; }
+details.prompt pre { white-space: pre-wrap; font-family: var(--font); font-size: 0.95rem; line-height: 1.6; margin: 0 1rem 1rem; padding: 1.25rem; background: var(--white); border: 1px solid var(--rule); border-radius: 3px; color: var(--ink); }
 details.prompt mark { background: var(--peach); color: var(--ink); padding: 0 0.2em; border-radius: 2px; }
-details.prompt .copy { font: inherit; font-weight: 500; font-size: 0.9rem; color: var(--navy); background: transparent; border: 1.5px solid var(--navy); border-radius: 3px; padding: 0.55rem 0.9rem; cursor: pointer; margin-bottom: 1.5rem; }
+details.prompt .copy { font: inherit; font-weight: 500; font-size: 0.9rem; color: var(--navy); background: transparent; border: 1.5px solid var(--navy); border-radius: 3px; padding: 0.55rem 0.9rem; cursor: pointer; margin: 0 1rem 1.5rem; }
 details.prompt .copy:hover { background: var(--navy); color: var(--white); }
 
 /* ---------------------------------------------------------- CTA */
@@ -352,10 +348,10 @@ footer a { color: var(--navy); text-decoration: none; }
   <aside class="rail" aria-label="Page navigation">
     <div>
       <a class="brand" href="https://wearejunction.com/">Junction</a>
-      <div class="ladder" aria-hidden="true">
-        <div class="rung" data-level="3"><span class="box"></span><span class="label">Do what you couldn't</span></div>
-        <div class="rung" data-level="2"><span class="box"></span><span class="label">Do it yourself</span></div>
-        <div class="rung" data-level="1"><span class="box"></span><span class="label">Do it faster</span></div>
+      <div class="ladder">
+        <a class="rung" href="#l3" data-level="3"><span class="box"></span><span class="label">Do what you couldn't</span></a>
+        <a class="rung" href="#l2" data-level="2"><span class="box"></span><span class="label">Do it yourself</span></a>
+        <a class="rung" href="#l1" data-level="1"><span class="box"></span><span class="label">Do it faster</span></a>
       </div>
       <nav>
         <a href="#start" data-nav>Where we started</a>
@@ -666,17 +662,6 @@ What not to do
       </div>
       <p class="muted small" style="margin-top:1.5rem">In a project with good instructions, the Role and half the Format block are already standing policy. That's the argument for spending the afternoon on setup: you write those rules once instead of retyping them forever.</p>
 
-      <h3 style="margin-top:4.5rem; font-size:var(--step-3)">Your list, sorted</h3>
-      <p class="muted">The tasks you named in the first ten minutes, with the level each one belongs to. That's the takeaway: you solved your own list.</p>
-      <ul class="roomlist">
-        <li><span class="org">Mountain Biking BC</span><span class="task fill">Task captured in the room</span><span class="lvl l0"><span class="swatch"></span>Level</span></li>
-        <li><span class="org">Camping &amp; RVing BC</span><span class="task fill">Task captured in the room</span><span class="lvl l0"><span class="swatch"></span>Level</span></li>
-        <li><span class="org">BC Wine Institute</span><span class="task fill">Task captured in the room</span><span class="lvl l0"><span class="swatch"></span>Level</span></li>
-        <li><span class="org">Ocean Boating BC</span><span class="task fill">Task captured in the room</span><span class="lvl l0"><span class="swatch"></span>Level</span></li>
-        <li><span class="org">Fishing BC</span><span class="task fill">Task captured in the room</span><span class="lvl l0"><span class="swatch"></span>Level</span></li>
-        <li><span class="org">Guide Outfitters Association of BC</span><span class="task fill">Task captured in the room</span><span class="lvl l0"><span class="swatch"></span>Level</span></li>
-        <li><span class="org">Backcountry Lodges of BC</span><span class="task fill">Task captured in the room</span><span class="lvl l0"><span class="swatch"></span>Level</span></li>
-      </ul>
     </section>
 
     <!-- ============================================================ prompts -->
@@ -688,7 +673,7 @@ What not to do
       <div class="prompts">
 
         <details class="prompt">
-          <summary><h3>Answer a member's question from your own reports</h3><span class="lt l1"><span class="swatch"></span>Level 1</span></summary>
+          <summary><h3>Answer a member's question from your own reports</h3><span class="lt l1"><span class="swatch"></span>Level 1</span><span class="chevron"></span></summary>
           <p class="why">The half-hour hunt through three years of campaign reports, replaced by a question. Works best inside a Project where the reports are already loaded.</p>
 <pre>You're a research assistant for <mark>[ORGANIZATION]</mark>, a <mark>[sector]</mark> association in BC. A member has asked: <mark>"[the question, e.g. which of our campaigns ran in the Kootenays last year and what did they deliver?"]</mark>
 
@@ -699,7 +684,7 @@ Format: a short answer I could paste into an email, then a bulleted list of sour
         </details>
 
         <details class="prompt">
-          <summary><h3>Structure a Co-op application answer from your own notes</h3><span class="lt l1"><span class="swatch"></span>Level 1</span></summary>
+          <summary><h3>Structure a Co-op application answer from your own notes</h3><span class="lt l1"><span class="swatch"></span>Level 1</span><span class="chevron"></span></summary>
           <p class="why">Reviewers can see AI-written answers. Use it for structure and consistency, and keep the words yours.</p>
 <pre>You're an editor helping me prepare a funding application for <mark>[PROGRAM]</mark>. I've pasted my rough notes below for the question: <mark>"[the application question, verbatim]"</mark>.
 
@@ -713,7 +698,7 @@ My notes:
         </details>
 
         <details class="prompt">
-          <summary><h3>Write alt text for a batch of photos</h3><span class="lt l1"><span class="swatch"></span>Level 1</span></summary>
+          <summary><h3>Write alt text for a batch of photos</h3><span class="lt l1"><span class="swatch"></span>Level 1</span><span class="chevron"></span></summary>
           <p class="why">Accessibility work that almost nobody has time for, done properly in one pass. Attach the images.</p>
 <pre>You're an accessibility specialist writing alt text for a tourism website. The images attached are from <mark>[ORGANIZATION]</mark> and will appear on <mark>[the page or campaign]</mark>.
 
@@ -724,7 +709,7 @@ Format: a two-column list, file name and alt text, in the order the images were 
         </details>
 
         <details class="prompt">
-          <summary><h3>Audit a page for how an AI would read it</h3><span class="lt l2"><span class="swatch"></span>Level 2</span></summary>
+          <summary><h3>Audit a page for how an AI would read it</h3><span class="lt l2"><span class="swatch"></span>Level 2</span><span class="chevron"></span></summary>
           <p class="why">The first step in GEO is finding out which traveller questions your site doesn't answer. Paste the page text, or connect the URL if your tool can fetch it.</p>
 <pre>You're a search specialist who understands how AI assistants assemble travel recommendations. Below is the text of a page from <mark>[ORGANIZATION]</mark>'s website about <mark>[topic]</mark>.
 
@@ -738,7 +723,7 @@ Page text:
         </details>
 
         <details class="prompt">
-          <summary><h3>Make a website change yourself</h3><span class="lt l2"><span class="swatch"></span>Level 2</span></summary>
+          <summary><h3>Make a website change yourself</h3><span class="lt l2"><span class="swatch"></span>Level 2</span><span class="chevron"></span></summary>
           <p class="why">The $800 pixel. Describe what you can see, and let it walk you through it one step at a time.</p>
 <pre>You're a patient web developer helping a non-technical person make a change to their own website. The site runs on <mark>[WordPress / Squarespace / Wix / other]</mark> and I have <mark>[admin / editor]</mark> access. I want to <mark>[describe the change, e.g. add a Meta Pixel to every page / fix a broken link in the footer / add a new FAQ section to the Plan Your Trip page]</mark>.
 
@@ -749,7 +734,7 @@ Start by asking me what I see when I log in.</pre>
         </details>
 
         <details class="prompt">
-          <summary><h3>Turn an analytics export into a board report</h3><span class="lt l2"><span class="swatch"></span>Level 2</span></summary>
+          <summary><h3>Turn an analytics export into a board report</h3><span class="lt l2"><span class="swatch"></span>Level 2</span><span class="chevron"></span></summary>
           <p class="why">Attach the GA4 or campaign export. The report is yours to edit; the analysis is the part that used to take a day.</p>
 <pre>You're a marketing analyst preparing a report for the board of <mark>[ORGANIZATION]</mark>, a <mark>[sector]</mark> association. The attached export covers <mark>[period]</mark> and comes from <mark>[GA4 / Meta Ads / our booking platform]</mark>. Our goals for this period were <mark>[goals, with targets if you have them]</mark>.
 
@@ -760,7 +745,7 @@ Format: one page. Three short headed sections, no more than two charts described
         </details>
 
         <details class="prompt">
-          <summary><h3>Translate and check consistency across versions</h3><span class="lt l1"><span class="swatch"></span>Level 1</span></summary>
+          <summary><h3>Translate and check consistency across versions</h3><span class="lt l1"><span class="swatch"></span>Level 1</span><span class="chevron"></span></summary>
           <p class="why">For member communications and visitor information, not public storytelling.</p>
 <pre>You're a professional translator working for <mark>[ORGANIZATION]</mark>. Translate the text below from English into <mark>[language]</mark> for a <mark>[member notice / visitor safety page / booking confirmation]</mark> audience. Keep place names, organization names and program names in English. Keep the register <mark>[formal / plain and friendly]</mark>.
 
@@ -774,7 +759,7 @@ Text:
         </details>
 
         <details class="prompt">
-          <summary><h3>Digest a stack of industry reports monthly</h3><span class="lt l3"><span class="swatch"></span>Level 3</span></summary>
+          <summary><h3>Digest a stack of industry reports monthly</h3><span class="lt l3"><span class="swatch"></span>Level 3</span><span class="chevron"></span></summary>
           <p class="why">The hours a week spent reading to stay current. Attach the reports, or run this in a Project where they're stored, and you have the beginnings of your own industry scan.</p>
 <pre>You're a research analyst for <mark>[ORGANIZATION]</mark>, a <mark>[sector]</mark> association in BC. Our members are <mark>[describe: e.g. small operators, mostly seasonal, dependent on the drive market]</mark>. I've attached <mark>[number]</mark> industry reports published this month.
 
@@ -785,7 +770,7 @@ Format: report-by-report list, then the three findings, then the contradictions,
         </details>
 
         <details class="prompt">
-          <summary><h3>Set up your first Project</h3><span class="lt l3"><span class="swatch"></span>Level 3</span></summary>
+          <summary><h3>Set up your first Project</h3><span class="lt l3"><span class="swatch"></span>Level 3</span><span class="chevron"></span></summary>
           <p class="why">The setup pattern, run by the tool itself. Upload your files first, then send this. It writes the draft instructions; you correct them.</p>
 <pre>I've just created a Project for <mark>[ORGANIZATION]</mark> and uploaded <mark>[number]</mark> files. The recurring question I want this Project to answer is: <mark>"[e.g. what do we already know that's relevant to the thing we're about to plan?"]</mark>
 
