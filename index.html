@@ -231,11 +231,13 @@ strong { font-weight: 500; }
 /* ---------------------------------------------------------- artifacts */
 .artifacts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gutter); margin-top: 3rem; }
 @media (max-width: 900px) { .artifacts { grid-template-columns: 1fr; } }
-.artifact { text-decoration: none; display: grid; gap: 0.75rem; padding-top: 1.25rem; border-top: 2px solid var(--navy); color: var(--ink); }
-.artifact .url { font-size: 0.9rem; color: var(--ink-soft); word-break: break-all; }
-.artifact h3 { font-size: var(--step-2); transition: color .2s; }
-.artifact:hover h3 { color: var(--coral); }
-.artifact p { color: var(--ink-soft); }
+.artifact { text-decoration: none; display: flex; flex-direction: column; gap: 0.75rem; padding-top: 1.25rem; border-top: 2px solid var(--navy); color: var(--ink); }
+.artifact h3 { font-size: var(--step-2); }
+.artifact p { color: var(--ink-soft); flex-grow: 1; }
+.artifact .artifact-link { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.95rem; font-weight: 500; color: var(--navy); text-decoration: none; margin-top: 0.5rem; transition: color .2s, gap .2s; }
+.artifact .artifact-link::after { content: "→"; transition: transform .2s; }
+.artifact .artifact-link:hover { color: var(--coral); gap: 0.6rem; }
+.artifact .artifact-link:hover::after { transform: translateX(2px); }
 
 /* ---------------------------------------------------------- setup pattern */
 .pattern { counter-reset: step; margin-top: 3rem; }
@@ -544,16 +546,17 @@ footer .brand img { height: 0.9rem; width: auto; }
         <div class="artifact">
           <h3>Tourism Industry Scan</h3>
           <p>Thousands of data points from industry sources, analyzed monthly. Nobody was doing this slowly before, because nobody could.</p>
-          <a class="btn navy" href="https://www.elearningu.com/course/tourism-industry-scan">View the scan</a>
+          <a class="artifact-link" href="https://www.elearningu.com/course/tourism-industry-scan">View the scan</a>
         </div>
         <div class="artifact">
           <h3>Group tour pricing calculator</h3>
           <p>Complex, multi-variable pricing that used to live in an error-prone spreadsheet only one person understood.</p>
-          <a class="btn navy" href="https://pricing.elearningu.com/">Try the calculator</a>
+          <a class="artifact-link" href="https://pricing.elearningu.com/">Try the calculator</a>
         </div>
         <div class="artifact">
           <h3>Northern Lights site and aurora tracker</h3>
           <p>Where we started. A resort owner's own website, with a forecasting tool no agency quoted.</p>
+          <a class="artifact-link" href="https://auroraforecast.me/whitehorse">See the aurora tracker</a>
         </div>
       </div>
       <p class="statement" style="margin-top:4.5rem">A 30% efficiency gain on nothing is still nothing. The smallest teams in the room have the most to gain here, not the least.</p>
