@@ -84,7 +84,8 @@ strong { font-weight: 500; }
 }
 @media (max-width: 900px) { .rail { display: none; } }
 
-.rail .brand { font-weight: 500; font-size: 1.05rem; color: var(--navy); text-decoration: none; letter-spacing: -0.01em; }
+.rail .brand { display: block; text-decoration: none; }
+.rail .brand img { height: 1.1rem; width: auto; }
 .rail nav { display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.9rem; }
 .rail nav a { text-decoration: none; color: var(--ink-soft); padding: 0.2rem 0; transition: color .2s; }
 .rail nav a[aria-current="true"] { color: var(--navy); font-weight: 500; }
@@ -133,7 +134,8 @@ strong { font-weight: 500; }
 /* ---------------------------------------------------------- hero */
 .hero { background: var(--navy); color: var(--white); min-height: 100vh; display: grid; grid-template-rows: auto 1fr auto; padding: 2rem var(--gutter) 3rem; }
 .hero .top { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; font-size: 0.95rem; color: rgba(255,255,255,0.75); }
-.hero .top .brand { color: var(--white); font-weight: 500; text-decoration: none; font-size: 1.05rem; }
+.hero .top .brand { text-decoration: none; }
+.hero .top .brand img { height: 1.1rem; width: auto; filter: brightness(0) invert(1); }
 @media (min-width: 901px) { .hero .top .brand { display: none; } }
 .hero .thesis { align-self: center; padding: 2.5rem 0; }
 .hero .thesis h1 { font-size: var(--step-5); font-weight: 300; letter-spacing: -0.035em; line-height: 1; color: var(--white); max-width: 18ch; }
@@ -298,8 +300,10 @@ details.prompt .copy:hover { background: var(--navy); color: var(--white); }
 .cta .contact { color: rgba(255,255,255,0.78); line-height: 1.7; }
 .cta .contact a { color: var(--white); }
 
-footer { padding: 2rem var(--gutter); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; font-size: 0.9rem; color: var(--ink-soft); border-top: 1px solid var(--rule); }
+footer { padding: 2rem var(--gutter); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; font-size: 0.9rem; color: var(--ink-soft); border-top: 1px solid var(--rule); align-items: center; }
 footer a { color: var(--navy); text-decoration: none; }
+footer .brand { display: inline-flex; align-items: center; gap: 0.5rem; }
+footer .brand img { height: 0.9rem; width: auto; }
 
 /* mobile top nav */
 .mobile-nav { display: none; position: sticky; top: 0; z-index: 5; background: var(--white); border-bottom: 1px solid var(--rule); overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -312,7 +316,7 @@ footer a { color: var(--navy); text-decoration: none; }
 
 <header class="hero" id="top">
   <div class="top">
-    <a class="brand" href="https://wearejunction.com/">Junction</a>
+    <a class="brand" href="https://wearejunction.com/"><img src="junction-logo.png" alt="Junction"></a>
     <span>AI Learning Session for Destination BC Co-op sector partners</span>
     <span>September 14, 2026</span>
   </div>
@@ -347,7 +351,7 @@ footer a { color: var(--navy); text-decoration: none; }
 <div class="shell">
   <aside class="rail" aria-label="Page navigation">
     <div>
-      <a class="brand" href="https://wearejunction.com/">Junction</a>
+      <a class="brand" href="https://wearejunction.com/"><img src="junction-logo.png" alt="Junction"></a>
       <div class="ladder">
         <a class="rung" href="#l3" data-level="3"><span class="box"></span><span class="label">Do what you couldn't</span></a>
         <a class="rung" href="#l2" data-level="2"><span class="box"></span><span class="label">Do it yourself</span></a>
@@ -803,7 +807,7 @@ Format: the four sections in order. Mark anything in the draft instructions you'
     </section>
 
     <footer>
-      <span><a href="https://wearejunction.com/">Junction</a> · Building digital capacity from the inside out.</span>
+      <span><a class="brand" href="https://wearejunction.com/"><img src="junction-logo.png" alt="Junction"></a> · Building digital capacity from the inside out.</span>
       <span>Prepared for Destination BC Co-operative Marketing Partnerships Program sector partners, September 2026.</span>
     </footer>
 
