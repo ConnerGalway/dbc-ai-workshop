@@ -307,6 +307,12 @@ footer a { color: var(--navy); text-decoration: none; }
 footer .brand { display: inline-flex; align-items: center; gap: 0.5rem; }
 footer .brand img { height: 0.9rem; width: auto; }
 
+/* sticky CTA */
+.sticky-cta { position: fixed; top: 1.5rem; right: var(--gutter); z-index: 100; }
+.sticky-cta a { display: inline-block; padding: 0.7rem 1.2rem; background: var(--coral); color: var(--white); font-weight: 500; font-size: 0.9rem; text-decoration: none; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: background .2s, transform .2s, box-shadow .2s; }
+.sticky-cta a:hover { background: #e55d4d; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+@media (max-width: 600px) { .sticky-cta { top: 1rem; right: 1rem; } .sticky-cta a { padding: 0.6rem 1rem; font-size: 0.85rem; } }
+
 /* mobile top nav */
 .mobile-nav { display: none; position: sticky; top: 0; z-index: 5; background: var(--white); border-bottom: 1px solid var(--rule); overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .mobile-nav ul { display: flex; gap: 1.25rem; padding: 0.85rem var(--gutter); white-space: nowrap; }
@@ -315,6 +321,10 @@ footer .brand img { height: 0.9rem; width: auto; }
 </style>
 </head>
 <body>
+
+<div class="sticky-cta">
+  <a href="#contact">Let's Talk</a>
+</div>
 
 <header class="hero" id="top">
   <div class="top">
