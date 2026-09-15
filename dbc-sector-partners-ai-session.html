@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Do what you couldn't — AI Learning Session takeaways | Destination BC Co-op Sector Partners × Junction</title>
+<meta name="description" content="A record of the September 14 AI Learning Session for Destination BC Co-operative Marketing Partnerships Program sector partners, what to do with it, and the setup pattern to steal.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ------------------------------------------------------------------
+   Junction brand tokens (Brand Cheat Sheet)
+   Basis Grotesque Pro is licensed — drop the woff2 files beside this
+   file and uncomment the @font-face block. Inter is the fallback.
+------------------------------------------------------------------ */
+/*
+@font-face { font-family: "Basis Grotesque Pro"; src: url("BasisGrotesquePro-Light.woff2") format("woff2"); font-weight: 300; font-display: swap; }
+@font-face { font-family: "Basis Grotesque Pro"; src: url("BasisGrotesquePro-Regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Basis Grotesque Pro"; src: url("BasisGrotesquePro-Medium.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+*/
+:root {
+  --navy: #183F61;
+  --coral: #F66D5D;
+  --mint: #B5E5D6;
+  --sage: #D6EAD1;
+  --peach: #FFDAA4;
+  --black: #000000;
+  --white: #FFFFFF;
+  --navy-deep: #12304A;
+  --ink: #1B1F24;
+  --ink-soft: #4A5560;
+  --rule: rgba(24, 63, 97, 0.14);
+
+  --font: "Basis Grotesque Pro", "Inter", -apple-system, system-ui, sans-serif;
+
+  --step-0: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+  --step-1: clamp(1.125rem, 1.05rem + 0.4vw, 1.375rem);
+  --step-2: clamp(1.375rem, 1.2rem + 0.8vw, 1.875rem);
+  --step-3: clamp(1.75rem, 1.4rem + 1.6vw, 2.75rem);
+  --step-4: clamp(2.25rem, 1.6rem + 3vw, 4rem);
+  --step-5: clamp(2.75rem, 1.6rem + 4.2vw, 5rem);
+
+  --rail: 200px;
+  --gutter: clamp(1.25rem, 4vw, 4rem);
+  --measure: 34em;
+  --section-pad: clamp(4rem, 9vw, 8.5rem);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; animation: none !important; } }
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-weight: 400;
+  font-size: var(--step-0);
+  line-height: 1.55;
+  color: var(--ink);
+  background: var(--white);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 { margin: 0; font-weight: 500; line-height: 1.1; letter-spacing: -0.015em; color: var(--navy); }
+p { margin: 0 0 1em; max-width: var(--measure); }
+p:last-child { margin-bottom: 0; }
+a { color: inherit; }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px solid var(--coral); outline-offset: 3px; border-radius: 2px; }
+ul { margin: 0; padding: 0; list-style: none; }
+strong { font-weight: 500; }
+
+.display { font-weight: 300; letter-spacing: -0.03em; line-height: 1.02; }
+
+/* ---------------------------------------------------------- layout */
+.shell { display: grid; grid-template-columns: var(--rail) minmax(0, 1fr); }
+@media (max-width: 900px) { .shell { grid-template-columns: 1fr; } }
+
+.rail {
+  position: sticky; top: 0; align-self: start; height: 100vh;
+  padding: 2rem 1.25rem 2rem var(--gutter);
+  border-right: 1px solid var(--rule);
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+@media (max-width: 900px) { .rail { display: none; } }
+
+.rail .brand { font-weight: 500; font-size: 1.05rem; color: var(--navy); text-decoration: none; letter-spacing: -0.01em; }
+.rail nav { display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.9rem; }
+.rail nav a { text-decoration: none; color: var(--ink-soft); padding: 0.2rem 0; transition: color .2s; }
+.rail nav a[aria-current="true"] { color: var(--navy); font-weight: 500; }
+.rail nav a:hover { color: var(--navy); }
+
+/* the ladder marker */
+.ladder { display: grid; gap: 0.5rem; margin: 2rem 0; }
+.ladder .rung {
+  display: grid; grid-template-columns: 2rem 1fr; align-items: center; gap: 0.75rem;
+  font-size: 0.85rem; color: var(--ink-soft);
+}
+.ladder .rung .box { height: 2rem; border: 1.5px solid var(--navy); border-radius: 3px; transition: background .3s, border-color .3s; }
+.ladder .rung .label { opacity: 0.55; transition: opacity .3s; }
+.ladder .rung[data-active="true"] .label { opacity: 1; color: var(--navy); font-weight: 500; }
+.ladder .rung[data-level="1"][data-active="true"] .box { background: var(--sage); }
+.ladder .rung[data-level="2"][data-active="true"] .box { background: var(--mint); }
+.ladder .rung[data-level="3"][data-active="true"] .box { background: var(--peach); }
+
+.main { min-width: 0; }
+.section { padding: var(--section-pad) var(--gutter); }
+.section + .section { border-top: 1px solid var(--rule); }
+.section.tint-sage { background: var(--sage); border-top: 0; }
+.section.tint-mint { background: var(--mint); border-top: 0; }
+.section.tint-peach { background: var(--peach); border-top: 0; }
+.section.tint-navy { background: var(--navy); color: var(--white); border-top: 0; }
+.section.tint-navy h2, .section.tint-navy h3, .section.tint-navy h4 { color: var(--white); }
+.section.tint-navy .muted { color: rgba(255,255,255,0.72); }
+
+.section-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 2rem var(--gutter); margin-bottom: clamp(2.5rem, 5vw, 4.5rem); align-items: end; }
+.section-head h2 { font-size: var(--step-4); font-weight: 500; letter-spacing: -0.025em; line-height: 1.02; }
+.section-head .lede { font-size: var(--step-1); font-weight: 300; line-height: 1.4; color: var(--ink-soft); }
+.tint-navy .section-head .lede { color: rgba(255,255,255,0.78); }
+@media (max-width: 720px) { .section-head { grid-template-columns: 1fr; } }
+
+.muted { color: var(--ink-soft); }
+.small { font-size: 0.9rem; }
+
+.level-tag { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; font-weight: 500; color: var(--navy); margin-bottom: 1.25rem; }
+.level-tag .swatch { width: 1.1rem; height: 1.1rem; border-radius: 3px; border: 1.5px solid var(--navy); box-shadow: inset 0 0 0 2px var(--white); }
+.level-tag.l1 .swatch { background: var(--sage); }
+.level-tag.l2 .swatch { background: var(--mint); }
+.level-tag.l3 .swatch { background: var(--peach); }
+
+/* ---------------------------------------------------------- hero */
+.hero { background: var(--navy); color: var(--white); min-height: 100vh; display: grid; grid-template-rows: auto 1fr auto; padding: 2rem var(--gutter) 3rem; }
+.hero .top { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; font-size: 0.95rem; color: rgba(255,255,255,0.75); }
+.hero .top .brand { color: var(--white); font-weight: 500; text-decoration: none; font-size: 1.05rem; }
+@media (min-width: 901px) { .hero .top .brand { display: none; } }
+.hero .thesis { align-self: center; padding: 2.5rem 0; }
+.hero .thesis h1 { font-size: var(--step-5); font-weight: 300; letter-spacing: -0.035em; line-height: 1; color: var(--white); max-width: 18ch; }
+.hero .thesis h1 .valuable { display: block; color: var(--coral); font-weight: 500; margin-top: 0.35em; }
+.hero .bottom { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 2rem var(--gutter); align-items: end; }
+@media (max-width: 720px) { .hero .bottom { grid-template-columns: 1fr; } }
+.hero .bottom p { color: rgba(255,255,255,0.82); font-size: var(--step-1); font-weight: 300; line-height: 1.4; }
+.hero .meta { font-size: 0.95rem; color: rgba(255,255,255,0.7); line-height: 1.6; }
+.hero .meta a { color: var(--white); }
+
+.btn { display: inline-block; text-decoration: none; font-weight: 500; padding: 0.9rem 1.4rem; border-radius: 3px; border: 1.5px solid currentColor; transition: background .2s, color .2s; }
+.btn.solid { background: var(--coral); border-color: var(--coral); color: var(--navy); }
+.btn.solid:hover { background: #F8857A; border-color: #F8857A; }
+.btn.ghost { color: var(--white); }
+.btn.ghost:hover { background: rgba(255,255,255,0.1); }
+.btn.navy { background: var(--navy); border-color: var(--navy); color: var(--white); }
+.btn.navy:hover { background: var(--navy-deep); }
+
+/* ---------------------------------------------------------- statements */
+.statement { font-size: var(--step-4); font-weight: 300; letter-spacing: -0.03em; line-height: 1.05; color: var(--navy); max-width: 22ch; }
+.tint-navy .statement { color: var(--white); }
+
+/* ---------------------------------------------------------- reveal numbers */
+.reveal { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem var(--gutter); margin-top: 3rem; }
+@media (max-width: 720px) { .reveal { grid-template-columns: 1fr; } }
+.reveal .figure { font-size: var(--step-5); font-weight: 300; letter-spacing: -0.04em; line-height: 0.95; color: var(--navy); }
+.reveal .caption { margin-top: 0.5rem; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- lists as grids */
+.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem var(--gutter); }
+.grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.5rem var(--gutter); }
+.grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2.5rem var(--gutter); }
+@media (max-width: 1100px) { .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 720px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
+
+.item h3 { font-size: var(--step-2); margin-bottom: 0.6rem; }
+.item h4 { font-size: var(--step-1); margin-bottom: 0.5rem; }
+.item p { color: var(--ink-soft); }
+.tint-navy .item p { color: rgba(255,255,255,0.78); }
+
+.rule-list > li { padding: 1.25rem 0; border-top: 1px solid var(--rule); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 1rem var(--gutter); }
+.rule-list > li:last-child { border-bottom: 1px solid var(--rule); }
+.rule-list h4 { font-size: var(--step-1); }
+.rule-list p { color: var(--ink-soft); }
+@media (max-width: 720px) { .rule-list > li { grid-template-columns: 1fr; gap: 0.35rem; } }
+
+.plain-list li { padding: 0.6rem 0; border-top: 1px solid var(--rule); font-size: var(--step-1); font-weight: 300; }
+.plain-list li:last-child { border-bottom: 1px solid var(--rule); }
+
+/* ---------------------------------------------------------- quotes from the room */
+.quotes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem var(--gutter); margin-top: 3rem; }
+@media (max-width: 720px) { .quotes { grid-template-columns: 1fr; } }
+.quotes blockquote { margin: 0; padding: 1.5rem 0 0; border-top: 2px solid var(--navy); font-size: var(--step-1); font-weight: 300; line-height: 1.4; color: var(--navy); }
+.quotes blockquote::before { content: "“"; display: block; font-size: 2.5rem; line-height: 0.6; margin-bottom: 0.5rem; color: var(--coral); }
+
+/* ---------------------------------------------------------- the levels frame */
+.levels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: rgba(255,255,255,0.18); margin-top: 3rem; }
+@media (max-width: 800px) { .levels { grid-template-columns: 1fr; } }
+.levels .level { background: var(--navy); padding: 2rem 2rem 2.5rem; display: grid; grid-template-rows: auto auto 1fr auto; gap: 1rem; min-height: 22rem; }
+.levels .level .num { font-size: var(--step-4); font-weight: 300; letter-spacing: -0.03em; line-height: 1; }
+.levels .level h3 { font-size: var(--step-2); }
+.levels .level p { color: rgba(255,255,255,0.78); }
+.levels .level .bar { height: 0.6rem; border-radius: 3px; }
+.levels .level:nth-child(1) .bar { background: var(--sage); }
+.levels .level:nth-child(2) .bar { background: var(--mint); }
+.levels .level:nth-child(3) .bar { background: var(--peach); }
+.levels .level:nth-child(1) .num { color: var(--sage); }
+.levels .level:nth-child(2) .num { color: var(--mint); }
+.levels .level:nth-child(3) .num { color: var(--peach); }
+
+/* ---------------------------------------------------------- before/after */
+.before-after { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; border: 1.5px solid var(--navy); border-radius: 4px; overflow: hidden; margin-top: 2.5rem; }
+@media (max-width: 720px) { .before-after { grid-template-columns: 1fr; } }
+.before-after > div { padding: 2rem; }
+.before-after > div + div { border-left: 1.5px solid var(--navy); }
+@media (max-width: 720px) { .before-after > div + div { border-left: 0; border-top: 1.5px solid var(--navy); } }
+.before-after .k { font-size: 0.9rem; font-weight: 500; color: var(--navy); margin-bottom: 0.75rem; }
+.before-after .v { font-size: var(--step-2); font-weight: 300; line-height: 1.25; color: var(--navy); }
+.before-after .after { background: var(--sage); }
+
+/* ---------------------------------------------------------- big number */
+.big-number { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem var(--gutter); align-items: center; margin-top: 3rem; }
+@media (max-width: 800px) { .big-number { grid-template-columns: 1fr; } }
+.big-number .n { font-size: clamp(5rem, 14vw, 13rem); font-weight: 300; letter-spacing: -0.05em; line-height: 0.9; color: var(--navy); }
+.big-number .n small { display: block; font-size: var(--step-1); font-weight: 400; letter-spacing: 0; line-height: 1.4; margin-top: 1rem; max-width: 30ch; color: var(--ink-soft); }
+
+.ota { display: grid; grid-template-columns: auto auto auto; align-items: center; gap: 1.5rem; margin: 2.5rem 0 1.5rem; }
+.ota .frac { font-size: clamp(4rem, 12vw, 10rem); font-weight: 300; letter-spacing: -0.05em; line-height: 0.9; color: var(--navy); }
+.ota .frac.to { color: var(--coral); }
+.ota .arrow { width: clamp(2rem, 6vw, 5rem); height: 2px; background: var(--navy); position: relative; }
+.ota .arrow::after { content: ""; position: absolute; right: -1px; top: -6px; width: 14px; height: 14px; border-top: 2px solid var(--navy); border-right: 2px solid var(--navy); transform: rotate(45deg); }
+
+/* ---------------------------------------------------------- artifacts */
+.artifacts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gutter); margin-top: 3rem; }
+@media (max-width: 900px) { .artifacts { grid-template-columns: 1fr; } }
+.artifact { text-decoration: none; display: grid; gap: 0.75rem; padding-top: 1.25rem; border-top: 2px solid var(--navy); color: var(--ink); }
+.artifact .url { font-size: 0.9rem; color: var(--ink-soft); word-break: break-all; }
+.artifact h3 { font-size: var(--step-2); transition: color .2s; }
+.artifact:hover h3 { color: var(--coral); }
+.artifact p { color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- setup pattern */
+.pattern { counter-reset: step; margin-top: 3rem; }
+.pattern > li { counter-increment: step; display: grid; grid-template-columns: 4rem minmax(0, 1fr) minmax(0, 1.5fr); gap: 1rem var(--gutter); padding: 1.75rem 0; border-top: 1px solid var(--rule); }
+.pattern > li:last-child { border-bottom: 1px solid var(--rule); }
+.pattern > li::before { content: counter(step); font-size: var(--step-3); font-weight: 300; letter-spacing: -0.03em; line-height: 1; color: var(--navy); }
+.pattern h3 { font-size: var(--step-2); }
+.pattern p { color: var(--ink-soft); }
+@media (max-width: 800px) { .pattern > li { grid-template-columns: 3rem minmax(0, 1fr); } .pattern > li > p { grid-column: 2; } }
+
+details.template { margin-top: 3rem; border: 1.5px solid var(--navy); border-radius: 4px; background: var(--white); }
+details.template summary { cursor: pointer; padding: 1.25rem 1.5rem; font-weight: 500; color: var(--navy); list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+details.template summary::-webkit-details-marker { display: none; }
+details.template summary::after { content: "+"; font-size: 1.6rem; font-weight: 300; line-height: 1; }
+details.template[open] summary::after { content: "–"; }
+details.template .body { padding: 0 1.5rem 1.5rem; }
+details.template pre { white-space: pre-wrap; font-family: var(--font); font-size: 0.95rem; line-height: 1.6; margin: 0; padding: 1.5rem; background: var(--sage); border-radius: 3px; color: var(--ink); }
+
+/* ---------------------------------------------------------- RCTF */
+.rctf { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin-top: 3rem; }
+@media (max-width: 800px) { .rctf { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .rctf { grid-template-columns: 1fr; } }
+.rctf > div { background: var(--white); padding: 1.75rem 1.5rem 2rem; }
+.rctf .letter { font-size: var(--step-5); font-weight: 300; letter-spacing: -0.04em; line-height: 0.9; color: var(--coral); }
+.rctf h3 { font-size: var(--step-1); margin: 0.75rem 0 0.5rem; }
+.rctf p { color: var(--ink-soft); font-size: 0.95rem; }
+
+.example { margin-top: 2.5rem; padding: 2rem; background: var(--white); border: 1.5px solid var(--navy); border-radius: 4px; display: grid; gap: 1.25rem; }
+.example .row { display: grid; grid-template-columns: 6rem minmax(0, 1fr); gap: 1rem; }
+@media (max-width: 600px) { .example .row { grid-template-columns: 1fr; gap: 0.25rem; } }
+.example .row .k { font-weight: 500; color: var(--coral); }
+.example .row p { max-width: none; color: var(--ink); }
+
+/* ---------------------------------------------------------- your list */
+.roomlist { margin-top: 3rem; }
+.roomlist li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.8fr) 7rem; gap: 1rem var(--gutter); padding: 1rem 0; border-top: 1px solid var(--rule); align-items: baseline; }
+.roomlist li:last-child { border-bottom: 1px solid var(--rule); }
+.roomlist .org { font-weight: 500; color: var(--navy); }
+.roomlist .task { color: var(--ink-soft); }
+.roomlist .task.fill { color: var(--ink-soft); font-style: italic; opacity: 0.7; }
+.roomlist .lvl { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 500; color: var(--navy); justify-self: end; }
+.roomlist .lvl .swatch { width: 1rem; height: 1rem; border-radius: 3px; border: 1.5px solid var(--navy); }
+.roomlist .lvl.l1 .swatch { background: var(--sage); } .roomlist .lvl.l2 .swatch { background: var(--mint); } .roomlist .lvl.l3 .swatch { background: var(--peach); }
+.roomlist .lvl.l0 .swatch { background: transparent; border-style: dashed; }
+@media (max-width: 720px) { .roomlist li { grid-template-columns: 1fr; gap: 0.25rem; } .roomlist .lvl { justify-self: start; } }
+
+/* ---------------------------------------------------------- prompts */
+.prompts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem var(--gutter); margin-top: 3rem; align-items: start; }
+@media (max-width: 900px) { .prompts { grid-template-columns: 1fr; } }
+details.prompt { border-top: 2px solid var(--navy); }
+details.prompt summary { cursor: pointer; list-style: none; padding: 1.25rem 0; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1rem; align-items: start; }
+details.prompt summary::-webkit-details-marker { display: none; }
+details.prompt summary h3 { font-size: var(--step-1); }
+details.prompt summary .lt { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; color: var(--ink-soft); white-space: nowrap; padding-top: 0.2rem; }
+details.prompt summary .lt .swatch { width: 0.85rem; height: 0.85rem; border-radius: 2px; border: 1.5px solid var(--navy); }
+details.prompt summary .lt.l1 .swatch { background: var(--sage); } details.prompt summary .lt.l2 .swatch { background: var(--mint); } details.prompt summary .lt.l3 .swatch { background: var(--peach); }
+details.prompt .why { color: var(--ink-soft); margin-bottom: 1rem; }
+details.prompt pre { white-space: pre-wrap; font-family: var(--font); font-size: 0.95rem; line-height: 1.6; margin: 0 0 1rem; padding: 1.25rem; background: var(--white); border: 1px solid var(--rule); border-radius: 3px; color: var(--ink); }
+details.prompt mark { background: var(--peach); color: var(--ink); padding: 0 0.2em; border-radius: 2px; }
+details.prompt .copy { font: inherit; font-weight: 500; font-size: 0.9rem; color: var(--navy); background: transparent; border: 1.5px solid var(--navy); border-radius: 3px; padding: 0.55rem 0.9rem; cursor: pointer; margin-bottom: 1.5rem; }
+details.prompt .copy:hover { background: var(--navy); color: var(--white); }
+
+/* ---------------------------------------------------------- CTA */
+.cta { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 2rem var(--gutter); align-items: end; }
+@media (max-width: 800px) { .cta { grid-template-columns: 1fr; } }
+.cta h2 { font-size: var(--step-4); font-weight: 300; letter-spacing: -0.03em; line-height: 1.02; max-width: 16ch; }
+.cta .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
+.cta .contact { color: rgba(255,255,255,0.78); line-height: 1.7; }
+.cta .contact a { color: var(--white); }
+
+footer { padding: 2rem var(--gutter); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; font-size: 0.9rem; color: var(--ink-soft); border-top: 1px solid var(--rule); }
+footer a { color: var(--navy); text-decoration: none; }
+
+/* mobile top nav */
+.mobile-nav { display: none; position: sticky; top: 0; z-index: 5; background: var(--white); border-bottom: 1px solid var(--rule); overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.mobile-nav ul { display: flex; gap: 1.25rem; padding: 0.85rem var(--gutter); white-space: nowrap; }
+.mobile-nav a { text-decoration: none; font-size: 0.9rem; color: var(--ink-soft); }
+@media (max-width: 900px) { .mobile-nav { display: block; } }
+</style>
+</head>
+<body>
+
+<header class="hero" id="top">
+  <div class="top">
+    <a class="brand" href="https://wearejunction.com/">Junction</a>
+    <span>AI Learning Session for Destination BC Co-op sector partners</span>
+    <span>September 14, 2026</span>
+  </div>
+  <div class="thesis">
+    <h1>The cheapest use of AI is doing your existing work faster.<span class="valuable">The valuable use is doing work you could never do before.</span></h1>
+  </div>
+  <div class="bottom">
+    <div>
+      <p>The session wasn't recorded, so this is the record. What we covered, what to do with it on Monday, and the setup pattern from the live build — which was the point of the whole morning.</p>
+    </div>
+    <div class="meta">
+      <p>Sector Partner Meeting, Co-operative Marketing Partnerships Program<br>Destination BC, 510 Burrard Street, Vancouver<br>Presented by Conner Galway, Junction Consulting</p>
+      <p style="margin-top:1.25rem"><a class="btn ghost" href="https://docs.google.com/presentation/d/1dXXrqwYgJs0YaiJIrjeoUIJoHwEOabnjM3q1tk-qufo/edit?usp=sharing">Open the slides</a></p>
+    </div>
+  </div>
+</header>
+
+<nav class="mobile-nav" aria-label="Sections">
+  <ul>
+    <li><a href="#start">Where we started</a></li>
+    <li><a href="#not">What we're not doing</a></li>
+    <li><a href="#frame">The frame</a></li>
+    <li><a href="#l1">Level 1</a></li>
+    <li><a href="#l2">Level 2</a></li>
+    <li><a href="#l3">Level 3</a></li>
+    <li><a href="#build">The build</a></li>
+    <li><a href="#monday">Monday</a></li>
+    <li><a href="#prompts">Prompts</a></li>
+  </ul>
+</nav>
+
+<div class="shell">
+  <aside class="rail" aria-label="Page navigation">
+    <div>
+      <a class="brand" href="https://wearejunction.com/">Junction</a>
+      <div class="ladder" aria-hidden="true">
+        <div class="rung" data-level="3"><span class="box"></span><span class="label">Do what you couldn't</span></div>
+        <div class="rung" data-level="2"><span class="box"></span><span class="label">Do it yourself</span></div>
+        <div class="rung" data-level="1"><span class="box"></span><span class="label">Do it faster</span></div>
+      </div>
+      <nav>
+        <a href="#start" data-nav>Where we started</a>
+        <a href="#not" data-nav>What we're not doing</a>
+        <a href="#frame" data-nav>The frame</a>
+        <a href="#l1" data-nav>Level 1</a>
+        <a href="#l2" data-nav>Level 2</a>
+        <a href="#l3" data-nav>Level 3</a>
+        <a href="#build" data-nav>The build</a>
+        <a href="#monday" data-nav>Start Monday</a>
+        <a href="#prompts" data-nav>Prompts</a>
+      </nav>
+    </div>
+    <div class="small muted">Nine people. Seven sector associations. Ninety minutes.</div>
+  </aside>
+
+  <main class="main">
+
+    <!-- ============================================================ where we started -->
+    <section class="section" id="start" data-level="0">
+      <div class="section-head">
+        <h2>Where we started</h2>
+        <p class="lede">A resort website with its own aurora-forecasting tool. Before anyone knew who built it, the room guessed at the agency invoice.</p>
+      </div>
+      <p>The <a href="https://northern-lights-website-draft.netlify.app/">Northern Lights Resort &amp; Spa</a> site, and its <a href="https://auroraforecast.me/whitehorse">aurora tracker for Whitehorse</a>, were built by the resort owner. Not commissioned. Built.</p>
+      <div class="reveal">
+        <div><div class="figure">4</div><div class="caption">training sessions</div></div>
+        <div><div class="figure">$200</div><div class="caption">in software and API fees</div></div>
+        <div><div class="figure">6 hrs</div><div class="caption">of development</div></div>
+      </div>
+      <p style="margin-top:3rem" class="muted">That's the whole session in one example. It isn't a faster version of something a resort used to pay for. It's a thing that didn't exist at that budget, and now does.</p>
+    </section>
+
+    <!-- ============================================================ what we're not talking about -->
+    <section class="section" id="not" data-level="0">
+      <div class="section-head">
+        <h2>What we're not talking about</h2>
+        <p class="lede">You'd already had an AI session in June. So we started with what goes wrong, and why — because the failures share a cause, and the cause is the thesis.</p>
+      </div>
+      <ul class="rule-list">
+        <li><h4>AI-written public content</h4><p>The problem isn't that it's badly written. It's that it's frictionless and forgettable. Destination BC's own line is the right one: don't let it write the story, write your story.</p></li>
+        <li><h4>Chatbot recommendations</h4><p>A chatbot is a promise that you'll be accountable for whatever it says at 2 a.m. Most organizations make that promise without realizing it.</p></li>
+        <li><h4>Generated imagery</h4><p>It can't clear the rights chain — third-party usage rights, Model Consent Release forms, FOIPPA — so it can't go in the BC Content Hub. It also draws public backlash faster than almost anything else a tourism brand can do.</p></li>
+        <li><h4>Fabricated trail, route and condition information</h4><p>The uncomfortable one for this room. Guide outfitting, backcountry lodges, boating and fishing all operate in country where wrong information is a rescue call.</p></li>
+      </ul>
+      <p class="statement" style="margin-top:4rem">In every one of these, someone used AI to replace judgment at exactly the moment judgment was the whole job.</p>
+
+      <h3 style="margin-top:4rem; font-size:var(--step-2)">What you told us before the session</h3>
+      <div class="quotes">
+        <blockquote>AI, particularly ChatGPT, is often wrong on geographic locations and the availability of consumer products, including tourism assets.</blockquote>
+        <blockquote>Everything I do is great or right. It always spins the angle I want to hear.</blockquote>
+        <blockquote>Mostly concerned about AI slop and the impact on graphic and creative design.</blockquote>
+        <blockquote>Sometimes users fail to keep their human brain adequately involved in the process.</blockquote>
+      </div>
+      <p class="muted small" style="margin-top:1.5rem">Anonymized from the pre-session poll. Every one of these is a judgment problem, not a technology problem.</p>
+    </section>
+
+    <!-- ============================================================ the frame -->
+    <section class="section tint-navy" id="frame" data-level="0">
+      <div class="section-head">
+        <h2>The frame</h2>
+        <p class="lede">Three levels. Everything else in the session, and everything on this page, sits on one of them. The colour marks stay with you down the rail.</p>
+      </div>
+      <div class="levels">
+        <div class="level">
+          <div class="num">1</div>
+          <h3>Do it faster</h3>
+          <p>Same work, less time. Where almost everyone already is. Real, but with the lowest ceiling — and the riskiest, because it's where public-facing mistakes happen.</p>
+          <div class="bar"></div>
+        </div>
+        <div class="level">
+          <div class="num">2</div>
+          <h3>Do it yourself</h3>
+          <p>Work you currently pay someone else to do. Website fixes, search visibility, reporting, production. The tier Destination BC asked us to spend the most time on.</p>
+          <div class="bar"></div>
+        </div>
+        <div class="level">
+          <div class="num">3</div>
+          <h3>Do what you couldn't</h3>
+          <p>Capability that didn't exist at your budget. Not a faster version of anything. This is how the smallest organization in the room gets a tool the largest one never commissioned.</p>
+          <div class="bar"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ level 1 -->
+    <section class="section tint-sage" id="l1" data-level="1">
+      <div class="level-tag l1"><span class="swatch"></span>Level 1</div>
+      <div class="section-head">
+        <h2>Do it faster</h2>
+        <p class="lede">Validating where the room is, then being honest about the ceiling — and the trap.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="item">
+          <h3>The trap</h3>
+          <p>Public-facing prose is the worst use of AI. It's also the most common. Co-op applications close October 31, and reviewers are already seeing near-identical AI-written answers across submissions. Structure your application with it if you like. Don't let it speak for you.</p>
+        </div>
+        <div class="item">
+          <h3>Level 1, done right</h3>
+          <ul class="plain-list">
+            <li>Structure</li>
+            <li>Editing</li>
+            <li>Alt text</li>
+            <li>Accessibility</li>
+            <li>Translation</li>
+            <li>Consistency checking</li>
+            <li>Briefing</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3 style="margin-top:4.5rem; font-size:var(--step-3)">The Harrison bot</h3>
+      <p class="muted">Junction's Tourism Harrison engagement ended in a 200-page strategy: media plans, content calendars, influencer schedules. Useful, and impossible to navigate. So we built a bot over it.</p>
+      <div class="before-after">
+        <div class="before">
+          <div class="k">Before</div>
+          <div class="v">"Which influencers are we working with in September?" — twenty minutes in a PDF, if you know where to look.</div>
+        </div>
+        <div class="after">
+          <div class="k">After</div>
+          <div class="v">The same question, answered in seconds, with a page reference. Then: "Draft the brief." The content is never AI-written. It's retrieval and assembly.</div>
+        </div>
+      </div>
+
+      <p class="statement" style="margin-top:4.5rem">You own the outputs. The rights, the consent, the accuracy. Human review is not optional.</p>
+    </section>
+
+    <!-- ============================================================ level 2 -->
+    <section class="section tint-mint" id="l2" data-level="2">
+      <div class="level-tag l2"><span class="swatch"></span>Level 2</div>
+      <div class="section-head">
+        <h2>Do it yourself</h2>
+        <p class="lede">The tier Destination BC explicitly asked for, and the emotional centre of the morning.</p>
+      </div>
+
+      <div class="big-number">
+        <div class="n">$800<small>to place a single tracking pixel on a page. One partner project, one line item, found in a Destination BC audit.</small></div>
+        <div>
+          <p>Nobody in the room was surprised, which is the point. Level 2 is the work you already pay for that you could, with a few hours of practice, do yourself. We demonstrated it live: a real change to a real website, with AI walking through the steps.</p>
+        </div>
+      </div>
+
+      <h3 style="margin-top:4.5rem; font-size:var(--step-3)">What Level 2 covers</h3>
+      <div class="grid-4" style="margin-top:2rem">
+        <div class="item"><h4>Website edits and fixes</h4><p>Copy changes, new pages, broken links, plugin updates, tracking. The things that currently sit in a ticket queue for three weeks.</p></div>
+        <div class="item"><h4>Search visibility</h4><p>SEO used to mean ranking for keywords. Now it means being the answer an AI gives. This is something you do, not something you buy.</p></div>
+        <div class="item"><h4>Campaign and content production</h4><p>Briefs, versions, resizes, partner kits. The production layer around the creative, not the creative itself.</p></div>
+        <div class="item"><h4>Reporting and dashboards</h4><p>Turn the export you already have into the report your board actually reads. Monthly, in minutes.</p></div>
+      </div>
+
+      <h3 style="margin-top:4.5rem; font-size:var(--step-3)">Why this is urgent, not just interesting</h3>
+      <p class="muted">Expedia and Booking.com have AI partnerships. If travellers ask an AI where to go and the answer routes through an OTA, the share of bookings that go through them changes — and your margins go with it.</p>
+      <div class="ota" aria-label="From one third to two thirds of bookings">
+        <div class="frac">⅓</div>
+        <div class="arrow"></div>
+        <div class="frac to">⅔</div>
+      </div>
+      <p class="muted">of bookings through OTAs, if we do nothing. Being the answer an AI gives about your sector is the defence, and it's built on what's already published on your site.</p>
+
+      <div class="grid-2" style="margin-top:4rem">
+        <div class="item">
+          <h3>SEO → GEO</h3>
+          <p>Generative engine optimization is less mysterious than it sounds. AI answers are assembled from structured, plainly written, question-shaped content. Describe experiences, not inventory. Answer the questions a traveller would actually ask. Keep your Google Business Profile complete.</p>
+        </div>
+        <div class="item">
+          <h3>This feeds the Iconics work</h3>
+          <p>The program is now Iconics-led and Destination BC is developing GEO statements for each Iconic area. Everything you do to make your sector legible to an AI reinforces that work rather than competing with it.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ level 3 -->
+    <section class="section tint-peach" id="l3" data-level="3">
+      <div class="level-tag l3"><span class="swatch"></span>Level 3</div>
+      <div class="section-head">
+        <h2>Do what you couldn't</h2>
+        <p class="lede">Three things that exist now, none of which is a faster version of anything.</p>
+      </div>
+      <div class="artifacts">
+        <a class="artifact" href="https://scan.elearningu.com/">
+          <h3>Tourism Industry Scan</h3>
+          <p>Thousands of data points from industry sources, analyzed monthly. Nobody was doing this slowly before, because nobody could.</p>
+          <span class="url">scan.elearningu.com</span>
+        </a>
+        <a class="artifact" href="https://pricing.elearningu.com/">
+          <h3>Group tour pricing calculator</h3>
+          <p>Complex, multi-variable pricing that used to live in an error-prone spreadsheet only one person understood.</p>
+          <span class="url">pricing.elearningu.com</span>
+        </a>
+        <a class="artifact" href="https://northern-lights-website-draft.netlify.app/">
+          <h3>Northern Lights site and aurora tracker</h3>
+          <p>Where we started. A resort owner's own website, with a forecasting tool no agency quoted.</p>
+          <span class="url">northern-lights-website-draft.netlify.app</span>
+        </a>
+      </div>
+      <p class="statement" style="margin-top:4.5rem">A 30% efficiency gain on nothing is still nothing. The smallest teams in the room have the most to gain here, not the least.</p>
+    </section>
+
+    <!-- ============================================================ the build -->
+    <section class="section" id="build" data-level="3">
+      <div class="level-tag l3"><span class="swatch"></span>Level 3, in practice</div>
+      <div class="section-head">
+        <h2>The build</h2>
+        <p class="lede">One of you sent a real problem: years of research, campaign results, plans and partner records across formats, and no fast way to ask a question across all of it. We built the answer in the room.</p>
+      </div>
+      <p>About two hours of setup happened before the session. The five minutes you watched was the payoff. That ratio is the lesson — and it's why we showed the scaffolding first: the project, its instructions, the files it was given and what each piece was doing.</p>
+      <p class="statement" style="margin-top:3rem">The artifact is disposable. The setup pattern is the thing to steal.</p>
+
+      <h3 style="margin-top:4.5rem; font-size:var(--step-3)">The setup pattern</h3>
+      <ol class="pattern">
+        <li>
+          <h3>Pick one recurring question</h3>
+          <p>Not "all our knowledge." The build answered one question well: what do we already know that's relevant to the thing we're about to plan? Projects that try to hold everything answer nothing well.</p>
+        </li>
+        <li>
+          <h3>Gather 10 to 25 files</h3>
+          <p>What a new hire would need to get up to speed on that question. Research, results, post-mortems, the current plan, the partner list, the asset inventory. Mixed formats are fine. Mixed vintages are fine if you tell it which supersedes which.</p>
+        </li>
+        <li>
+          <h3>Fix the file names, not the shared drive</h3>
+          <p>The cheapest quality improvement available. Copy the files out, rename the copies with document type and year, upload those. Do not reorganize the drive first; that project never finishes.</p>
+        </li>
+        <li>
+          <h3>Write the instructions</h3>
+          <p>The files alone give you a search engine. The instructions make it behave like a colleague who knows your organization: who it is, what it holds, what outranks what, cite the file for every claim, flag conflicts, say what's missing. This is the part people skip.</p>
+        </li>
+        <li>
+          <h3>Test it on three things you already know</h3>
+          <p>Check the citations. If it's right on those, start trusting it on the ones you can't answer. If it's wrong, the fix is almost always a missing file or a missing instruction, not a different tool.</p>
+        </li>
+      </ol>
+
+      <details class="template">
+        <summary>The instruction template from the build, generalized for your organization</summary>
+        <div class="body">
+          <p class="muted small">Paste this into a Claude or ChatGPT Project's custom instructions and replace the bracketed parts. Half of it will apply to you unchanged.</p>
+<pre>You are a planning assistant for [ORGANIZATION], a [one-line description]. You are working with the [TEAM] on [the recurring question this project answers].
+
+Your job is to help the team use knowledge the organization already has. Most of the time the answer to their question exists somewhere in the project knowledge. Find it, connect it, and show them where it came from.
+
+What's in the project knowledge
+- [Research: name the studies and years]
+- [Results: what reports, what period]
+- [Debriefs and post-mortems]
+- [Plans, partner records, asset lists, board or committee notes]
+
+How to answer
+1. Search the project knowledge before answering. If you're drawing on general knowledge rather than our material, say so.
+2. Cite the source file for every factual claim — file name and the section, sheet or page.
+3. Connect across files. A useful answer usually pulls research, results and assets together.
+4. Flag conflicts rather than resolving them silently. Name both sources, say which is more recent, and say which you used.
+5. Say what is missing. "We have never tested this" is a useful answer.
+6. Separate evidence from inference.
+
+Source hierarchy
+- [Newer study] supersedes [older study] wherever they disagree.
+- What actually happened (debriefs) outranks what was intended (plans).
+- [Any draft records] may describe decisions that have since changed.
+
+Working defaults
+- Canadian spelling and CAD. Current fiscal year is [FY].
+- Our headline measures are [KPIs].
+- Our audience segments are [names].
+- Be concise. Lead with the answer, then the evidence.
+
+What not to do
+- Do not invent statistics, quotes or source documents.
+- Do not treat superseded material as current guidance.
+- Do not soften a finding to make past decisions look better.</pre>
+        </div>
+      </details>
+
+      <p class="muted small" style="margin-top:2rem">Before you upload anything real: decide what is and isn't allowed in (personal information, confidential partner data, anything under NDA), who can change the instructions, and who owns the review. If your organization doesn't have an AI policy yet, this is a reasonable forcing function to write one. Test the idea first with files that are already public.</p>
+    </section>
+
+    <!-- ============================================================ start monday -->
+    <section class="section" id="monday" data-level="0">
+      <div class="section-head">
+        <h2>Start Monday</h2>
+        <p class="lede">Convert the morning into one action. Then a second one.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="item">
+          <h3>Where to start</h3>
+          <p>The most boring, most repeated thing you do. Not the most interesting problem, and not the biggest. The one you could describe to a new hire in two sentences and have done fifty times.</p>
+        </div>
+        <div class="item">
+          <h3>What to stop paying for</h3>
+          <p>Whatever you just realized you've been paying too much for. You know which line item it is. Try doing it yourself once, with AI walking you through it, before the next invoice arrives.</p>
+        </div>
+      </div>
+
+      <h3 style="margin-top:4.5rem; font-size:var(--step-3)">A prompt framework: RCTF</h3>
+      <p class="muted">Four parts. The context block is where the work is, and it's the part people skip.</p>
+      <div class="rctf">
+        <div><div class="letter">R</div><h3>Role</h3><p>Who it should be for this task. A strategist, an editor, an accessibility reviewer.</p></div>
+        <div><div class="letter">C</div><h3>Context</h3><p>Who you are, who it's for, what's happened already, what's at stake, what you don't want.</p></div>
+        <div><div class="letter">T</div><h3>Task</h3><p>What to do, specifically. Including what to check, flag, or leave out.</p></div>
+        <div><div class="letter">F</div><h3>Format</h3><p>Length, structure, sections, citations. And permission to say "that isn't in the files."</p></div>
+      </div>
+
+      <div class="example">
+        <div class="row"><div class="k">Role</div><p>You're a senior campaign strategist who knows our organization's research and campaign history.</p></div>
+        <div class="row"><div class="k">Context</div><p>We're planning the third year of our fall campaign for families within a four-hour drive, September to October travel window, $180,000 approved. I'm presenting a draft brief to my director Thursday and she'll want to know what we're carrying forward from the last two years and what we're changing. I don't want to repeat last spring's mistakes.</p></div>
+        <div class="row"><div class="k">Task</div><p>Draft the campaign brief. Pull the audience insight from our research, the timing and format decisions from what our campaigns have actually delivered, and the reusable assets and partners from our inventory and partner log. Flag any deadline or rights constraint that affects whether this plan is even possible.</p></div>
+        <div class="row"><div class="k">Format</div><p>One page. Sections: objective, audience insight, message frame, channel approach, flight timing, assets to reuse, partners, risks. Cite the source file for every factual claim. Mark anything you're inferring. If something isn't in the files, say so.</p></div>
+      </div>
+      <p class="muted small" style="margin-top:1.5rem">In a project with good instructions, the Role and half the Format block are already standing policy. That's the argument for spending the afternoon on setup: you write those rules once instead of retyping them forever.</p>
+
+      <h3 style="margin-top:4.5rem; font-size:var(--step-3)">Your list, sorted</h3>
+      <p class="muted">The tasks you named in the first ten minutes, with the level each one belongs to. That's the takeaway: you solved your own list.</p>
+      <ul class="roomlist">
+        <li><span class="org">Mountain Biking BC</span><span class="task fill">Task captured in the room</span><span class="lvl l0"><span class="swatch"></span>Level</span></li>
+        <li><span class="org">Camping &amp; RVing BC</span><span class="task fill">Task captured in the room</span><span class="lvl l0"><span class="swatch"></span>Level</span></li>
+        <li><span class="org">BC Wine Institute</span><span class="task fill">Task captured in the room</span><span class="lvl l0"><span class="swatch"></span>Level</span></li>
+        <li><span class="org">Ocean Boating BC</span><span class="task fill">Task captured in the room</span><span class="lvl l0"><span class="swatch"></span>Level</span></li>
+        <li><span class="org">Fishing BC</span><span class="task fill">Task captured in the room</span><span class="lvl l0"><span class="swatch"></span>Level</span></li>
+        <li><span class="org">Guide Outfitters Association of BC</span><span class="task fill">Task captured in the room</span><span class="lvl l0"><span class="swatch"></span>Level</span></li>
+        <li><span class="org">Backcountry Lodges of BC</span><span class="task fill">Task captured in the room</span><span class="lvl l0"><span class="swatch"></span>Level</span></li>
+      </ul>
+    </section>
+
+    <!-- ============================================================ prompts -->
+    <section class="section tint-sage" id="prompts" data-level="0">
+      <div class="section-head">
+        <h2>Starter prompts</h2>
+        <p class="lede">Nine prompts built for sector associations, tagged by level. Open one, replace the highlighted parts with your own context, copy it into Claude or ChatGPT. None of them writes your public-facing story.</p>
+      </div>
+      <div class="prompts">
+
+        <details class="prompt">
+          <summary><h3>Answer a member's question from your own reports</h3><span class="lt l1"><span class="swatch"></span>Level 1</span></summary>
+          <p class="why">The half-hour hunt through three years of campaign reports, replaced by a question. Works best inside a Project where the reports are already loaded.</p>
+<pre>You're a research assistant for <mark>[ORGANIZATION]</mark>, a <mark>[sector]</mark> association in BC. A member has asked: <mark>"[the question, e.g. which of our campaigns ran in the Kootenays last year and what did they deliver?"]</mark>
+
+Search the attached reports and answer the question directly. For every fact, name the report and page or section it came from. If the reports disagree, say so and tell me which is more recent. If part of the question isn't answered anywhere in the reports, say that plainly rather than guessing.
+
+Format: a short answer I could paste into an email, then a bulleted list of sources.</pre>
+          <button class="copy" type="button">Copy prompt</button>
+        </details>
+
+        <details class="prompt">
+          <summary><h3>Structure a Co-op application answer from your own notes</h3><span class="lt l1"><span class="swatch"></span>Level 1</span></summary>
+          <p class="why">Reviewers can see AI-written answers. Use it for structure and consistency, and keep the words yours.</p>
+<pre>You're an editor helping me prepare a funding application for <mark>[PROGRAM]</mark>. I've pasted my rough notes below for the question: <mark>"[the application question, verbatim]"</mark>.
+
+Do not rewrite my notes in your own words. Instead: (1) organize them into a logical order that answers the question, (2) point out anything the question asks for that my notes don't cover, (3) flag any claim I make that I haven't supported with a number or an example, and (4) check that my notes are consistent with the goals I've described in the <mark>[attached marketing plan / previous application]</mark>.
+
+Format: my own sentences reordered under short headings, followed by a list of gaps and inconsistencies. Keep my voice exactly as it is.
+
+My notes:
+<mark>[paste]</mark></pre>
+          <button class="copy" type="button">Copy prompt</button>
+        </details>
+
+        <details class="prompt">
+          <summary><h3>Write alt text for a batch of photos</h3><span class="lt l1"><span class="swatch"></span>Level 1</span></summary>
+          <p class="why">Accessibility work that almost nobody has time for, done properly in one pass. Attach the images.</p>
+<pre>You're an accessibility specialist writing alt text for a tourism website. The images attached are from <mark>[ORGANIZATION]</mark> and will appear on <mark>[the page or campaign]</mark>.
+
+For each image, write alt text that describes what a sighted visitor would take from it — the place, the activity, the mood — in under 125 characters. Don't start with "image of" or "photo of." Don't include marketing language. If the image includes text, transcribe it. If an image is purely decorative, say "decorative" instead of writing alt text.
+
+Format: a two-column list, file name and alt text, in the order the images were attached.</pre>
+          <button class="copy" type="button">Copy prompt</button>
+        </details>
+
+        <details class="prompt">
+          <summary><h3>Audit a page for how an AI would read it</h3><span class="lt l2"><span class="swatch"></span>Level 2</span></summary>
+          <p class="why">The first step in GEO is finding out which traveller questions your site doesn't answer. Paste the page text, or connect the URL if your tool can fetch it.</p>
+<pre>You're a search specialist who understands how AI assistants assemble travel recommendations. Below is the text of a page from <mark>[ORGANIZATION]</mark>'s website about <mark>[topic]</mark>.
+
+First, list the ten questions a traveller planning a <mark>[sector]</mark> trip in BC would most likely ask an AI about this topic. Then, for each question, say whether this page answers it clearly, answers it partially, or doesn't answer it. Finally, rewrite the three weakest sections so they answer the question plainly, describing what a visitor does rather than what we offer — but mark these as drafts for me to edit, not final copy.
+
+Format: the question list with a one-word verdict each, then the three draft rewrites.
+
+Page text:
+<mark>[paste]</mark></pre>
+          <button class="copy" type="button">Copy prompt</button>
+        </details>
+
+        <details class="prompt">
+          <summary><h3>Make a website change yourself</h3><span class="lt l2"><span class="swatch"></span>Level 2</span></summary>
+          <p class="why">The $800 pixel. Describe what you can see, and let it walk you through it one step at a time.</p>
+<pre>You're a patient web developer helping a non-technical person make a change to their own website. The site runs on <mark>[WordPress / Squarespace / Wix / other]</mark> and I have <mark>[admin / editor]</mark> access. I want to <mark>[describe the change, e.g. add a Meta Pixel to every page / fix a broken link in the footer / add a new FAQ section to the Plan Your Trip page]</mark>.
+
+Walk me through it one step at a time. After each step, wait for me to tell you what I see on screen before giving the next one. If there's a risk I could break something, tell me before that step and tell me how to undo it. Don't assume I know where any menu is.
+
+Start by asking me what I see when I log in.</pre>
+          <button class="copy" type="button">Copy prompt</button>
+        </details>
+
+        <details class="prompt">
+          <summary><h3>Turn an analytics export into a board report</h3><span class="lt l2"><span class="swatch"></span>Level 2</span></summary>
+          <p class="why">Attach the GA4 or campaign export. The report is yours to edit; the analysis is the part that used to take a day.</p>
+<pre>You're a marketing analyst preparing a report for the board of <mark>[ORGANIZATION]</mark>, a <mark>[sector]</mark> association. The attached export covers <mark>[period]</mark> and comes from <mark>[GA4 / Meta Ads / our booking platform]</mark>. Our goals for this period were <mark>[goals, with targets if you have them]</mark>.
+
+Tell me what happened, in plain language, in this order: the three things that matter most, what changed versus <mark>[the previous period / last year]</mark>, and what I should ask about or act on. Show your numbers. Where the data can't support a conclusion, say so instead of speculating.
+
+Format: one page. Three short headed sections, no more than two charts described in words, and a closing list of three questions for the board.</pre>
+          <button class="copy" type="button">Copy prompt</button>
+        </details>
+
+        <details class="prompt">
+          <summary><h3>Translate and check consistency across versions</h3><span class="lt l1"><span class="swatch"></span>Level 1</span></summary>
+          <p class="why">For member communications and visitor information — not public storytelling.</p>
+<pre>You're a professional translator working for <mark>[ORGANIZATION]</mark>. Translate the text below from English into <mark>[language]</mark> for a <mark>[member notice / visitor safety page / booking confirmation]</mark> audience. Keep place names, organization names and program names in English. Keep the register <mark>[formal / plain and friendly]</mark>.
+
+Then compare your translation against the English and list any place where a meaning could shift, a term has no direct equivalent, or a legal or safety phrase needs a human translator's review before publishing.
+
+Format: the translation, then the review list.
+
+Text:
+<mark>[paste]</mark></pre>
+          <button class="copy" type="button">Copy prompt</button>
+        </details>
+
+        <details class="prompt">
+          <summary><h3>Digest a stack of industry reports monthly</h3><span class="lt l3"><span class="swatch"></span>Level 3</span></summary>
+          <p class="why">The hours a week spent reading to stay current. Attach the reports, or run this in a Project where they're stored, and you have the beginnings of your own industry scan.</p>
+<pre>You're a research analyst for <mark>[ORGANIZATION]</mark>, a <mark>[sector]</mark> association in BC. Our members are <mark>[describe: e.g. small operators, mostly seasonal, dependent on the drive market]</mark>. I've attached <mark>[number]</mark> industry reports published this month.
+
+For each report, tell me in two sentences whether it matters to our members and why. Then, across all of them, identify the three findings most relevant to <mark>[our current priority, e.g. shoulder-season demand / US visitation / booking behaviour]</mark>, with the report and page for each. Flag anywhere the reports contradict each other. Finish with one paragraph I could send to members as "what we're watching this month" — marked as a draft for me to edit.
+
+Format: report-by-report list, then the three findings, then the contradictions, then the draft paragraph.</pre>
+          <button class="copy" type="button">Copy prompt</button>
+        </details>
+
+        <details class="prompt">
+          <summary><h3>Set up your first Project</h3><span class="lt l3"><span class="swatch"></span>Level 3</span></summary>
+          <p class="why">The setup pattern, run by the tool itself. Upload your files first, then send this. It writes the draft instructions; you correct them.</p>
+<pre>I've just created a Project for <mark>[ORGANIZATION]</mark> and uploaded <mark>[number]</mark> files. The recurring question I want this Project to answer is: <mark>"[e.g. what do we already know that's relevant to the thing we're about to plan?"]</mark>
+
+Read the files and do four things: (1) list what's in them, one line per file, with the year each one covers; (2) tell me which files overlap or contradict each other and which is more recent; (3) tell me what's obviously missing for the question I've described; and (4) draft the custom instructions for this Project — who you are, what you hold, what supersedes what, cite every claim, flag conflicts, say what's missing — written so I can paste them straight in.
+
+Format: the four sections in order. Mark anything in the draft instructions you're unsure about so I can correct it.</pre>
+          <button class="copy" type="button">Copy prompt</button>
+        </details>
+
+      </div>
+    </section>
+
+    <!-- ============================================================ CTA -->
+    <section class="section tint-navy" id="contact" data-level="0">
+      <div class="cta">
+        <div>
+          <h2>Frameworks get nods. "How long did that take?" gets a phone call.</h2>
+          <p class="muted" style="margin-top:1.5rem">If Monday's first action worked and you want to build the system behind it — the Projects, the instructions, the connected data, the tool your sector has never had — that's the work Junction does. Start with a conversation.</p>
+          <div class="actions">
+            <a class="btn solid" href="https://calendly.com/conner-galway/introductory-call-conner">Book a call with Conner</a>
+            <a class="btn ghost" href="https://wearejunction.com/">wearejunction.com</a>
+          </div>
+        </div>
+        <div class="contact">
+          Conner Galway<br>
+          Junction Consulting<br>
+          <a href="mailto:conner@wearejunction.com">conner@wearejunction.com</a>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <span><a href="https://wearejunction.com/">Junction</a> · Building digital capacity from the inside out.</span>
+      <span>Prepared for Destination BC Co-operative Marketing Partnerships Program sector partners, September 2026.</span>
+    </footer>
+
+  </main>
+</div>
+
+<script>
+(function () {
+  // Rail ladder + nav respond to the section in view. Motion is scroll-driven only.
+  var sections = document.querySelectorAll('.section[id]');
+  var rungs = document.querySelectorAll('.ladder .rung');
+  var navLinks = document.querySelectorAll('[data-nav]');
+
+  function setLevel(level) {
+    rungs.forEach(function (r) {
+      var l = parseInt(r.getAttribute('data-level'), 10);
+      r.setAttribute('data-active', (level >= l && level > 0) ? 'true' : 'false');
+    });
+  }
+  function setNav(id) {
+    navLinks.forEach(function (a) {
+      a.setAttribute('aria-current', a.getAttribute('href') === '#' + id ? 'true' : 'false');
+    });
+  }
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          setLevel(parseInt(e.target.getAttribute('data-level') || '0', 10));
+          setNav(e.target.id);
+        }
+      });
+    }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+    sections.forEach(function (s) { io.observe(s); });
+  }
+
+  // Copy buttons
+  document.querySelectorAll('details.prompt .copy').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var pre = btn.parentElement.querySelector('pre');
+      var text = pre.innerText;
+      var done = function () { var o = btn.textContent; btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = o; }, 1600); };
+      if (navigator.clipboard) { navigator.clipboard.writeText(text).then(done); }
+      else { var ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); done(); }
+    });
+  });
+})();
+</script>
+</body>
+</html>
