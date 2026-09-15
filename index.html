@@ -307,11 +307,13 @@ footer a { color: var(--navy); text-decoration: none; }
 footer .brand { display: inline-flex; align-items: center; gap: 0.5rem; }
 footer .brand img { height: 0.9rem; width: auto; }
 
-/* sticky CTA */
-.sticky-cta { position: fixed; top: 1.5rem; right: var(--gutter); z-index: 100; }
-.sticky-cta a { display: inline-block; padding: 0.7rem 1.2rem; background: var(--coral); color: var(--white); font-weight: 500; font-size: 0.9rem; text-decoration: none; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: background .2s, transform .2s, box-shadow .2s; }
-.sticky-cta a:hover { background: #e55d4d; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-@media (max-width: 600px) { .sticky-cta { top: 1rem; right: 1rem; } .sticky-cta a { padding: 0.6rem 1rem; font-size: 0.85rem; } }
+/* sticky header */
+.sticky-header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(--navy); padding: 0.75rem var(--gutter); display: flex; justify-content: space-between; align-items: center; transform: translateY(-100%); transition: transform .3s ease; box-shadow: 0 2px 12px rgba(0,0,0,0.15); }
+.sticky-header.visible { transform: translateY(0); }
+.sticky-header .brand img { height: 1rem; filter: brightness(0) invert(1); }
+.sticky-header .cta { display: inline-block; padding: 0.5rem 1rem; background: var(--coral); color: var(--white); font-weight: 500; font-size: 0.85rem; text-decoration: none; border-radius: 4px; transition: background .2s; }
+.sticky-header .cta:hover { background: #e55d4d; }
+@media (max-width: 900px) { .sticky-header { display: none; } }
 
 /* mobile top nav */
 .mobile-nav { display: none; position: sticky; top: 0; z-index: 5; background: var(--white); border-bottom: 1px solid var(--rule); overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -322,8 +324,9 @@ footer .brand img { height: 0.9rem; width: auto; }
 </head>
 <body>
 
-<div class="sticky-cta">
-  <a href="#contact">Let's Talk</a>
+<div class="sticky-header">
+  <a class="brand" href="https://wearejunction.com/"><img src="junction-logo.png" alt="Junction"></a>
+  <a class="cta" href="#contact">Let's Talk</a>
 </div>
 
 <header class="hero" id="top">
@@ -842,6 +845,22 @@ Format: the four sections in order. Mark anything in the draft instructions you'
 
 <script>
 (function () {
+  // Sticky header appears after scrolling past hero
+  var stickyHeader = document.querySelector('.sticky-header');
+  var hero = document.querySelector('.hero');
+  if (stickyHeader && hero && 'IntersectionObserver' in window) {
+    var heroObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          stickyHeader.classList.remove('visible');
+        } else {
+          stickyHeader.classList.add('visible');
+        }
+      });
+    }, { threshold: 0 });
+    heroObserver.observe(hero);
+  }
+
   // Rail ladder + nav respond to the section in view. Motion is scroll-driven only.
   var sections = document.querySelectorAll('.section[id]');
   var rungs = document.querySelectorAll('.ladder .rung');
